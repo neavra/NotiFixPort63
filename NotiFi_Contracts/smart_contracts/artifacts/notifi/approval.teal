@@ -1,16 +1,24 @@
 #pragma version 8
 intcblock 0 1
-bytecblock 0x
+bytecblock 0x 0x151f7c75
 txn NumAppArgs
 intc_0 // 0
 ==
-bnz main_l4
+bnz main_l8
 txna ApplicationArgs 0
 pushbytes 0x02bece11 // "hello(string)string"
 ==
-bnz main_l3
+bnz main_l7
+txna ApplicationArgs 0
+pushbytes 0x209e1929 // "updateEmail(string)void"
+==
+bnz main_l6
+txna ApplicationArgs 0
+pushbytes 0x21c5bfcf // "getEmail(address)string"
+==
+bnz main_l5
 err
-main_l3:
+main_l5:
 txn OnCompletion
 intc_0 // NoOp
 ==
@@ -19,16 +27,40 @@ intc_0 // 0
 !=
 &&
 assert
-callsub hellocaster_1
+callsub getEmailcaster_5
 intc_1 // 1
 return
-main_l4:
+main_l6:
 txn OnCompletion
 intc_0 // NoOp
 ==
-bnz main_l6
+txn ApplicationID
+intc_0 // 0
+!=
+&&
+assert
+callsub updateEmailcaster_4
+intc_1 // 1
+return
+main_l7:
+txn OnCompletion
+intc_0 // NoOp
+==
+txn ApplicationID
+intc_0 // 0
+!=
+&&
+assert
+callsub hellocaster_3
+intc_1 // 1
+return
+main_l8:
+txn OnCompletion
+intc_0 // NoOp
+==
+bnz main_l10
 err
-main_l6:
+main_l10:
 txn ApplicationID
 intc_0 // 0
 ==
@@ -54,8 +86,33 @@ concat
 frame_bury 0
 retsub
 
+// updateEmail
+updateEmail_1:
+proto 1 0
+txn Sender
+box_del
+pop
+txn Sender
+frame_dig -1
+box_put
+retsub
+
+// getEmail
+getEmail_2:
+proto 1 1
+bytec_0 // ""
+frame_dig -1
+box_get
+store 1
+store 0
+load 1
+assert
+load 0
+frame_bury 0
+retsub
+
 // hello_caster
-hellocaster_1:
+hellocaster_3:
 proto 0 0
 bytec_0 // ""
 dup
@@ -64,7 +121,33 @@ frame_bury 1
 frame_dig 1
 callsub hello_0
 frame_bury 0
-pushbytes 0x151f7c75 // 0x151f7c75
+bytec_1 // 0x151f7c75
+frame_dig 0
+concat
+log
+retsub
+
+// updateEmail_caster
+updateEmailcaster_4:
+proto 0 0
+bytec_0 // ""
+txna ApplicationArgs 1
+frame_bury 0
+frame_dig 0
+callsub updateEmail_1
+retsub
+
+// getEmail_caster
+getEmailcaster_5:
+proto 0 0
+bytec_0 // ""
+dup
+txna ApplicationArgs 1
+frame_bury 1
+frame_dig 1
+callsub getEmail_2
+frame_bury 0
+bytec_1 // 0x151f7c75
 frame_dig 0
 concat
 log

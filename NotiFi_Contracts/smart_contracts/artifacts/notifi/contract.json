@@ -12,6 +12,30 @@
             "returns": {
                 "type": "string"
             }
+        },
+        {
+            "name": "updateEmail",
+            "args": [
+                {
+                    "type": "string",
+                    "name": "email"
+                }
+            ],
+            "returns": {
+                "type": "void"
+            }
+        },
+        {
+            "name": "getEmail",
+            "args": [
+                {
+                    "type": "address",
+                    "name": "address"
+                }
+            ],
+            "returns": {
+                "type": "string"
+            }
         }
     ],
     "networks": {}

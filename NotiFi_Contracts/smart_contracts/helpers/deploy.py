@@ -16,6 +16,7 @@ from algosdk.util import algos_to_microalgos
 from algosdk.v2client.algod import AlgodClient
 from algosdk.v2client.indexer import IndexerClient
 from beaker import localnet
+from beaker.consts import algo
 
 logger = logging.getLogger(__name__)
 
@@ -35,15 +36,15 @@ def deploy(
     app_spec = ApplicationSpecification.from_json(app_spec_path.read_text())
 
     # get deployer account by name
-    deployer = get_account(algod_client, "DEPLOYER", fund_with_algos=0)
+    deployer = get_account(algod_client, "DEPLOYER", fund_with_algos=10000)
 
     minimum_funds_micro_algos = algos_to_microalgos(deployer_initial_funds)
     ensure_funded(
         algod_client,
         EnsureBalanceParameters(
             account_to_fund=deployer,
-            min_spending_balance_micro_algos=minimum_funds_micro_algos,
-            min_funding_increment_micro_algos=minimum_funds_micro_algos,
+            min_spending_balance_micro_algos=10000 * algo,
+            min_funding_increment_micro_algos=10000 * algo,
         ),
     )
 
