@@ -15,6 +15,20 @@
   justify-content: center;
   align-items: center;
 }
+.content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px;
+}
+
+.logo img {
+  width: 300px; /* Adjust size as needed */
+}
+
+.text {
+  text-align: right;
+}
 
 .title a {
   color: #0070f3;
