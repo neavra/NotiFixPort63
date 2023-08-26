@@ -1,7 +1,19 @@
 import Head from 'next/head';
 import styles from '../styles/Home.module.css';
+import conn from '../db/db.js';
 
-export default function Home() {
+export async function getServerSideProps() {
+  try {
+    const result = await conn.query('SELECT * FROM test'); // Change 'test' to your table name
+    const data = result.rows;
+    return { props: { data } };
+  } catch (error) {
+    console.error('Error fetching data:', error);
+    return { props: { data: [] } };
+  }
+}
+
+export default function Home({data}) {
   return (
     <div className={styles.container}>
       <Head>
@@ -47,6 +59,14 @@ export default function Home() {
             </p>
           </a>
         </div>
+        <div>
+        <h2>Fetched Data from Database</h2>
+        <ul>
+          {data.map((row, index) => (
+            <li key={index}>{JSON.stringify(row)}</li>
+          ))}
+        </ul>
+      </div>
       </main>
 
       <footer>
