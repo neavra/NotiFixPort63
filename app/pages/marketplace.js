@@ -1,19 +1,49 @@
 import styles from '../styles/Home.module.css';
 import Layout from '../components/Layout';
-import conn from '../db/db.js';
+import Card from "../components/Card";
+import { useEffect, useState } from "react";
 
-export async function getServerSideProps() {
-    try {
-      const result = await conn.query('SELECT * FROM test');
-      const data = result.rows;
-      return { props: { data } };
-    } catch (error) {
-      console.error('Error fetching data:', error);
-      return { props: { data: [] } };
+function generateCards(protocols) {
+    const protocolArray = protocols[0];
+    return protocolArray.map((protocol, i) => (
+      <div key={i} className="m-2">
+        <Card
+            key={i}
+            name={protocol.name}
+            description={protocol.description}
+        />
+      </div>
+    ));
+}
+
+function generateLoadingCards() {
+    const loadingCards = [];
+    for (let i = 0; i < 4; i++) {
+        loadingCards.push(
+            <h1 key={i}>LOADING</h1>
+        );
     }
+    return loadingCards;
+}
+
+async function getProtocols() {
+    const res = await fetch("http://localhost:8001" + "/getProtocols");
+    const data = await res.json();
+    console.log(data)
+    return data;
   }
 
-export default function MarketPlace({data}) {
+export default function MarketPlace() {
+    const [loading, setLoading] = useState(true);
+    const [protocols, setProtocols] = useState([]);
+
+    useEffect(() => {
+        Promise.all([getProtocols()]).then((protocolRes) => {
+          console.log(protocolRes);
+          setProtocols(protocolRes);
+          setLoading(false);
+        });
+      }, []);
     return (
         <Layout>
             <div className={styles.container}>
@@ -21,12 +51,7 @@ export default function MarketPlace({data}) {
                     <div>
                         <h2>This is the marketplace page</h2>
                     </div>
-                    <h2>Example of how to get data from the Database</h2>
-                        <ul>
-                        {data.map((row, index) => (
-                            <li key={index}>{JSON.stringify(row)}</li>
-                        ))}
-                        </ul>
+                    <div className="flex flex-wrap justify-center m-4">{loading ? generateLoadingCards() : generateCards(protocols)}</div>
                 </main>
 
                 <style jsx global>{`
