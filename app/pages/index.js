@@ -1,9 +1,11 @@
 import styles from '../styles/Home.module.css';
 import Layout from '../components/Layout';
 import Connect from '../components/Connect';
-
+import { useWallet } from '../context/WalletContext';
 
 export default function Home() {
+  const { walletAddress } = useWallet();
+
   return (
     <Layout>
       <div className={styles.container}>
@@ -14,25 +16,31 @@ export default function Home() {
             </div>
             <div className={styles.slogan}>
               <h2>Your Slogan Here</h2>
+              {/* {walletAddress ? (
+                <h2>Your Wallet Address: {walletAddress}</h2>
+              ) : (
+                <p>Wallet address is not available.</p>
+              )} */}
             </div>
             <Connect></Connect>
           </div>
         </main>
 
-      <style jsx global>{`
-        html,
-        body {
-          padding: 0;
-          margin: 0;
-          font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto,
-            Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue,
-            sans-serif;
-        }
-        * {
-          box-sizing: border-box;
-        }
-      `}</style>
-    </div>
+        <style jsx global>{`
+          html,
+          body {
+            padding: 0;
+            margin: 0;
+            font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto,
+              Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue,
+              sans-serif;
+          }
+          * {
+            box-sizing: border-box;
+          }
+        `}</style>
+      </div>
     </Layout> 
-  )
+  );
 }
+

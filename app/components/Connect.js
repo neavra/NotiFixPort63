@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
 import MyAlgoConnect from '@randlabs/myalgo-connect';
+import { useWallet } from '../context/WalletContext';
+
 
 const Connect = () => {
     const [connected, setConnected] = useState(false);
-    const [walletAddress, setWalletAddress] = useState('');
+    const { walletAddress, setWalletAddress } = useWallet();
 
     const handleConnect = async () => {
         const myAlgoConnect = new MyAlgoConnect({ disableLedgerNano: false });
