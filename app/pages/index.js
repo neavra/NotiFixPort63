@@ -1,5 +1,6 @@
 import styles from '../styles/Home.module.css';
 import Layout from '../components/Layout';
+import Connect from '../components/Connect';
 
 
 export default function Home() {
@@ -14,9 +15,7 @@ export default function Home() {
             <div className={styles.slogan}>
               <h2>Your Slogan Here</h2>
             </div>
-            <div className={styles.text}>
-              <button>Connect Wallet</button>
-            </div>
+            <Connect></Connect>
           </div>
         </main>
 
