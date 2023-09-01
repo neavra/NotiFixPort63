@@ -1,6 +1,7 @@
 import styles from '../styles/Home.module.css';
 import Layout from '../components/Layout';
 import Connect from '../components/Connect';
+import Dashboard from '../components/Dashboard';
 import { useWallet } from '../context/WalletContext';
 
 export default function Home() {
@@ -16,13 +17,12 @@ export default function Home() {
             </div>
             <div className={styles.slogan}>
               <h2>Your Slogan Here</h2>
-              {/* {walletAddress ? (
-                <h2>Your Wallet Address: {walletAddress}</h2>
-              ) : (
-                <p>Wallet address is not available.</p>
-              )} */}
             </div>
-            <Connect></Connect>
+            {walletAddress ? (
+              <Dashboard />
+            ) : (
+              <Connect />
+            )}
           </div>
         </main>
 
@@ -43,4 +43,5 @@ export default function Home() {
     </Layout> 
   );
 }
+
 
