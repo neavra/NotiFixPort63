@@ -1,7 +1,7 @@
 import styles from '../styles/Home.module.css';
 import Layout from '../components/Layout';
 
-export default function MarketPlace({}) {
+export default function Settings({}) {
     return (
         <Layout>
             <div className={styles.container}>

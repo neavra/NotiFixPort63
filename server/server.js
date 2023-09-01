@@ -52,4 +52,29 @@ app.get('/getProtocols', async (req, res) => {
     return res.send(protocolsInfo);
 });
 
+app.get('/getSubscriptions', async (req, res) => {
+  try {
+    const { walletAddress } = req.query;
+
+    if (!walletAddress) {
+      return res.status(400).json({ error: 'Wallet address is required' });
+    }
+
+    const subscriptionsRef = collection(db, 'subscriptions');
+    const q = query(subscriptionsRef, where('walletAddress', '==', walletAddress));
+
+    const querySnapshot = await getDocs(q);
+
+    const subscriptionsInfo = [];
+    querySnapshot.forEach((doc) => {
+      const subscriptionData = { id: doc.id, ...doc.data() };
+      subscriptionsInfo.push(subscriptionData);
+    });
+    return res.json(subscriptionsInfo);
+  } catch (error) {
+    console.error('Error fetching subscriptions:', error);
+    return res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
 app.listen(port, () => console.log(`Express.js API listening on port ${port}`));
