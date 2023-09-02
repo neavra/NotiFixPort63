@@ -77,6 +77,30 @@ app.get('/getSubscriptions', async (req, res) => {
   }
 });
 
+app.post('/setSubscription', async (req, res) => {
+  try {
+    const { walletAddress, protocolName } = req.body;
+
+    if (!walletAddress || !protocolName) {
+      return res.status(400).json({ error: 'Missing walletAddress or protocolName in request body' });
+    }
+
+    const subsciptionsCollection = collection(db, 'subsciptions');
+
+    const newSubsciptions = {
+      walletAddress,
+      protocolName,
+    };
+
+    const subsciptionRef = await addDoc(subsciptionsCollection, newSubsciptions);
+
+    return res.status(201).json({ id: subsciptionRef.id });
+  } catch (error) {
+    console.error('Error creating subscription:', error);
+    return res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
 app.post('/setUser', async (req, res) => {
   try {
     const { walletAddress, type } = req.body;

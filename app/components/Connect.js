@@ -46,8 +46,7 @@ const Connect = () => {
             <button onClick={handleConnect}>Connect Wallet</button>
           ) : (
             <div>
-                <p>Wallet Connected</p>
-                <p>Wallet Address: {walletAddress}</p>
+                <p>{walletAddress}</p>
             </div>
           )}
             <style jsx>{`
@@ -59,7 +58,7 @@ const Connect = () => {
                 display: inline-block;
                         margin: 10px;
                         padding: 10px 20px;
-                        background-color: #0070f3;
+                        background-color: #EA7C69;
                         color: white;
                         border: none;
                         border-radius: 4px;

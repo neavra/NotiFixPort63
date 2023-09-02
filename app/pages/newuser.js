@@ -99,7 +99,7 @@ export default function NewUser() {
                         display: inline-block;
                         margin: 10px;
                         padding: 10px 20px;
-                        background-color: #0070f3;
+                        background-color: #EA7C69;
                         color: white;
                         border: none;
                         border-radius: 4px;
@@ -108,7 +108,7 @@ export default function NewUser() {
                     }
 
                     .button:hover {
-                        background-color: #0054a4;
+                        background-color: #F5B2A7;
                     }
                 `}</style>
 
