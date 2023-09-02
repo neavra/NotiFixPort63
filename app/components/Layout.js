@@ -1,10 +1,12 @@
 import React from 'react';
 import Sidebar from './Sidebar';
+import Connect from './Connect';
 
 const Layout = ({ children }) => {
   return (
     <div className="layout">
       <Sidebar />
+      <Connect></Connect>
       <main>{children}</main>
 
       <style jsx>{`

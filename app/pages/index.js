@@ -18,11 +18,6 @@ export default function Home() {
             <div className={styles.slogan}>
               <h2>Your Slogan Here</h2>
             </div>
-            {walletAddress ? (
-              <Dashboard />
-            ) : (
-              <Connect />
-            )}
           </div>
         </main>
 

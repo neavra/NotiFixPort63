@@ -7,22 +7,6 @@ import algosdk from "algosdk";
 
 export default function NewUser() {
     const { walletAddress, setWalletAddress } = useWallet();
-    const [connected, setConnected] = useState(false);
-
-    const handleConnect = async () => {
-        const myAlgoConnect = new MyAlgoConnect({ disableLedgerNano: false });
-
-        const settings = {
-            shouldSelectOneAccount: false,
-            openManager: false
-        };
-
-        const accounts = await myAlgoConnect.connect(settings);
-        console.log(accounts);
-        const firstAccount = accounts[0];            
-        setWalletAddress(firstAccount.address);
-        setConnected(true);
-    }
     const handleProtocolClick = () => {
     };
 
@@ -87,16 +71,6 @@ export default function NewUser() {
                         )}
                         {!walletAddress && (
                             <h2>Welcome new user, are you a protocol or a user?</h2>
-                        )}
-                    </div>
-                    <div >
-                        {!connected ? (
-                            <button className="button" onClick={handleConnect}>Connect Wallet</button>
-                        ) : (
-                            <div>
-                                <p>Wallet Connected</p>
-                                <p>Wallet Address: {walletAddress}</p>
-                            </div>
                         )}
                     </div>
                     <div>

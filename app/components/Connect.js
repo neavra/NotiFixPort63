@@ -50,7 +50,26 @@ const Connect = () => {
                 <p>Wallet Address: {walletAddress}</p>
             </div>
           )}
+            <style jsx>{`
+                .connect-button {
+                position: absolute;
+                top: 10px;
+                right: 10px;
+                z-index: 1000;
+                display: inline-block;
+                        margin: 10px;
+                        padding: 10px 20px;
+                        background-color: #0070f3;
+                        color: white;
+                        border: none;
+                        border-radius: 4px;
+                        cursor: pointer;
+                        text-decoration: none;
+                }
+            `}
+            </style>
         </div>
+        
       );
 }
 
