@@ -1,38 +1,80 @@
 import styles from '../styles/Home.module.css';
 import Layout from '../components/Layout';
+import React, { useState } from 'react';
 import { useWallet } from '../context/WalletContext';
+import MyAlgoConnect from '@randlabs/myalgo-connect';
 import algosdk from "algosdk";
 
 export default function NewUser() {
-    const { walletAddress } = useWallet();
+    const { walletAddress, setWalletAddress } = useWallet();
+    const [connected, setConnected] = useState(false);
 
+    const handleConnect = async () => {
+        const myAlgoConnect = new MyAlgoConnect({ disableLedgerNano: false });
+
+        const settings = {
+            shouldSelectOneAccount: false,
+            openManager: false
+        };
+
+        const accounts = await myAlgoConnect.connect(settings);
+        console.log(accounts);
+        const firstAccount = accounts[0];            
+        setWalletAddress(firstAccount.address);
+        setConnected(true);
+    }
     const handleProtocolClick = () => {
     };
 
     const handleUserClick = async () => {
+        const myAlgoConnect = new MyAlgoConnect();
+
+        const settings = {
+            shouldSelectOneAccount: false,
+            openManager: false
+        };
         // User should be prompted to sign a transaction
         const algodClient = new algosdk.Algodv2("",'https://node.testnet.algoexplorerapi.io', '');
-
         const params = await algodClient.getTransactionParams().do();
 
         const txn = algosdk.makePaymentTxnWithSuggestedParamsFromObject({
-        suggestedParams: {
-            ...params,
-        },
-        from: walletAddress,
-        to: receiver,
-        amount: algosdk.algosToMicroalgos(0.001),
+            suggestedParams: {
+                ...params,
+            },
+            from: walletAddress,
+            to: "EWSUKE3OIMAEDDGBA6IEIOS4T773Y4HAKYPLC6KW4L34DN6Z6PHOYT35WE", 
+            amount: algosdk.algosToMicroalgos(0.001),
         });
-
         const [ signedTxn ] = await myAlgoConnect.signTxns([{
             txn: Buffer.from(txn.toByte()).toString('base64')
-        }]);
-
+          }]);
         const txBytes = Buffer.from(signedTxn, 'base64')
 
         const response = await algodClient.sendRawTransaction(txBytes).do();
         // once the transaction is signed, register the newuser
         console.log(response)
+        // insert the new user
+        const newUser = {
+            walletAddress: walletAddress,
+            type: 'user',
+        };
+    
+        const serverResponse = await fetch('http://localhost:8001/setUser', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+            body: JSON.stringify(newUser),
+        });
+    
+        if (serverResponse.status === 201) {
+            const responseData = await serverResponse.json();
+            console.log('New user created with ID:', responseData.id);
+            window.location.href = '/';
+
+        } else {
+            console.error('Failed to create a new user on the server');
+        }
     };
 
     return (
@@ -45,6 +87,16 @@ export default function NewUser() {
                         )}
                         {!walletAddress && (
                             <h2>Welcome new user, are you a protocol or a user?</h2>
+                        )}
+                    </div>
+                    <div >
+                        {!connected ? (
+                            <button className="button" onClick={handleConnect}>Connect Wallet</button>
+                        ) : (
+                            <div>
+                                <p>Wallet Connected</p>
+                                <p>Wallet Address: {walletAddress}</p>
+                            </div>
                         )}
                     </div>
                     <div>
