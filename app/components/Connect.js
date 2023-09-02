@@ -46,7 +46,7 @@ const Connect = () => {
             <button onClick={handleConnect}>Connect Wallet</button>
           ) : (
             <div>
-                <p>{walletAddress}</p>
+                <p>{walletAddress.slice(0, 4)}...{walletAddress.slice(-4)}</p>
             </div>
           )}
             <style jsx>{`
