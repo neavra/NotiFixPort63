@@ -1,28 +1,38 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
-const Dashboard = () => {
+const Dashboard = ({walletAddress}) => {
     const [data, setData] = useState([]);
     const [sortColumn, setSortColumn] = useState("name");
     const [sortDirection, setSortDirection] = useState("asc");
+    const requestBody = {
+      walletAddress: walletAddress,
+    };
+    useEffect(() => {
+      fetch('http://localhost:8001/getSubscriptions', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(requestBody),
+      })
+        .then((response) => response.json())
+        .then((data) => setData(data))
+        .catch((error) => console.error('Error fetching data:', error));
+    }, [walletAddress]);
   
-    // useEffect(() => {
-    //   fetch("your-api-endpoint")
-    //     .then((response) => response.json())
-    //     .then((data) => setData(data))
-    //     .catch((error) => console.error("Error fetching data:", error));
-    // }, []);
-  
-  const sortedData = data.sort((a, b) => {
-    const aValue = a[sortColumn];
-    const bValue = b[sortColumn];
-    if (aValue < bValue) {
-      return sortDirection === "asc" ? -1 : 1;
-    }
-    if (aValue > bValue) {
-      return sortDirection === "asc" ? 1 : -1;
-    }
-    return 0;
-  });
+    const sortedData = Array.isArray(data)
+    ? data.sort((a, b) => {
+        const aValue = a[sortColumn];
+        const bValue = b[sortColumn];
+        if (aValue < bValue) {
+          return sortDirection === "asc" ? -1 : 1;
+        }
+        if (aValue > bValue) {
+          return sortDirection === "asc" ? 1 : -1;
+        }
+        return 0;
+      })
+    : [];
 
   const handleSort = (column) => {
     if (column === sortColumn) {
@@ -54,12 +64,12 @@ const Dashboard = () => {
             <tr key={index}>
               <td className="border px-4 py-2">{index + 1}</td>
               <td className="border px-4 py-2">
-                <a className="font-light hover:text-blue-500" href={`tel:${row.number}`}>
-                  {row.name}
+                <a>
+                  {row.protocolName}
                 </a>
               </td>
               <td className="border px-4 py-2">
-                <a>{row.description}</a>
+                <a>{row.protocolDescription}</a>
               </td>
             </tr>
           ))}

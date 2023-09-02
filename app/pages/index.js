@@ -1,6 +1,5 @@
 import styles from '../styles/Home.module.css';
 import Layout from '../components/Layout';
-import Connect from '../components/Connect';
 import Dashboard from '../components/Dashboard';
 import { useWallet } from '../context/WalletContext';
 
@@ -10,15 +9,19 @@ export default function Home() {
   return (
     <Layout>
       <div className={styles.container}>
-        <main className={styles.main}>
-          <div className={styles.content}>
-            <div className={styles.logo}>
-              <img src="/NotiFiLogo.svg" alt="Logo" />
+      <main className={styles.main}>
+          {walletAddress ? (
+            <Dashboard walletAddress={ walletAddress }/>
+          ) : (
+            <div className={styles.content}>
+              <div className={styles.logo}>
+                <img src="/NotiFiLogo.svg" alt="Logo" />
+              </div>
+              <div className={styles.slogan}>
+                <h2>Your Slogan Here</h2>
+              </div>
             </div>
-            <div className={styles.slogan}>
-              <h2>Your Slogan Here</h2>
-            </div>
-          </div>
+          )}
         </main>
 
         <style jsx global>{`

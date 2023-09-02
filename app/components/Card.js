@@ -13,6 +13,7 @@ const Card = ({name, description }) => {
         const subscriptionData = {
             walletAddress: walletAddress,
             protocolName: name,
+            protocolDescription: description,
         };
     
         try {

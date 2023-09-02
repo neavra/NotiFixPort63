@@ -52,9 +52,9 @@ app.get('/getProtocols', async (req, res) => {
     return res.send(protocolsInfo);
 });
 
-app.get('/getSubscriptions', async (req, res) => {
+app.post('/getSubscriptions', async (req, res) => {
   try {
-    const { walletAddress } = req.query;
+    const { walletAddress } = req.body;
 
     if (!walletAddress) {
       return res.status(400).json({ error: 'Wallet address is required' });
@@ -79,17 +79,18 @@ app.get('/getSubscriptions', async (req, res) => {
 
 app.post('/setSubscription', async (req, res) => {
   try {
-    const { walletAddress, protocolName } = req.body;
+    const { walletAddress, protocolName, protocolDescription } = req.body;
 
-    if (!walletAddress || !protocolName) {
-      return res.status(400).json({ error: 'Missing walletAddress or protocolName in request body' });
+    if (!walletAddress || !protocolName || !protocolDescription) {
+      return res.status(400).json({ error: 'Missing walletAddress or protocolName or protocolDescription in request body' });
     }
 
-    const subsciptionsCollection = collection(db, 'subsciptions');
+    const subsciptionsCollection = collection(db, 'subscriptions');
 
     const newSubsciptions = {
       walletAddress,
       protocolName,
+      protocolDescription,
     };
 
     const subsciptionRef = await addDoc(subsciptionsCollection, newSubsciptions);
