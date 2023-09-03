@@ -153,7 +153,7 @@ app.post('/setUser', async (req, res) => {
 
 app.post('/setNotification', async (req, res) => {
   try {
-    const { protocolName, recipient, message } = req.body;
+    const { protocolName, recipient, message, status, timeSent } = req.body;
 
     if (!protocolName || !recipient || !message) {
       return res.status(400).json({ error: 'Missing protocolName, recipient, or message in the request body' });
@@ -165,6 +165,8 @@ app.post('/setNotification', async (req, res) => {
       protocolName,
       recipient,
       message,
+      status,
+      timeSent,
     };
 
     const notificationRef = await addDoc(notificationsCollection, newNotification);
@@ -175,5 +177,32 @@ app.post('/setNotification', async (req, res) => {
     return res.status(500).json({ error: 'Internal server error' });
   }
 });
+
+app.post('/getNotificationsByWallet', async (req, res) => {
+  try {
+    const { walletAddress } = req.body;
+
+    if (!walletAddress) {
+      return res.status(400).json({ error: 'Wallet address is required' });
+    }
+
+    const notificationsRef = collection(db, 'notifications');
+    const q = query(notificationsRef, where('recipient', '==', walletAddress));
+
+    const querySnapshot = await getDocs(q);
+
+    const notificationsInfo = [];
+    querySnapshot.forEach((doc) => {
+      const notificationData = { id: doc.id, ...doc.data() };
+      notificationsInfo.push(notificationData);
+    });
+    
+    return res.json(notificationsInfo);
+  } catch (error) {
+    console.error('Error fetching notifications:', error);
+    return res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
 
 app.listen(port, () => console.log(`Express.js API listening on port ${port}`));

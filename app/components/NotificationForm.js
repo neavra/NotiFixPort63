@@ -58,6 +58,7 @@ const NotificationForm = () => {
       alert("Please fill out all required fields.");
       return;
     }
+    const timeSent = new Date().toISOString();
     try {
         const response = await fetch('http://localhost:8001/setNotification', {
           method: 'POST',
@@ -68,6 +69,8 @@ const NotificationForm = () => {
             protocolName: protocol,
             recipient: recipient,
             message: message,
+            status: "UNREAD",
+            timeSent: timeSent,
           }),
         });
     

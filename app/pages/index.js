@@ -1,6 +1,7 @@
 import styles from '../styles/Home.module.css';
 import Layout from '../components/Layout';
 import Dashboard from '../components/Dashboard';
+import Notificationboard from '../components/Notificationboard';
 import { useSelector, useDispatch } from 'react-redux';
 
 export default function Home() {
@@ -11,7 +12,11 @@ export default function Home() {
       <div className={styles.container}>
       <main className={styles.main}>
           {walletAddress ? (
-            <Dashboard walletAddress={ walletAddress }/>
+            <div>
+              <h1>Your Subscriptions</h1>
+              <Dashboard walletAddress={ walletAddress }/>
+              <Notificationboard recipient={ walletAddress }/>
+            </div>
           ) : (
             <div className={styles.content}>
               <div className={styles.logo}>

@@ -59,7 +59,7 @@ const Dashboard = ({walletAddress}) => {
             </th>
           </tr>
         </thead>
-        <tbody className="text-gray-700">
+        <tbody className="text-white-700">
           {sortedData.map((row, index) => (
             <tr key={index}>
               <td className="border px-4 py-2">{index + 1}</td>
