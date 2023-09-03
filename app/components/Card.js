@@ -1,8 +1,8 @@
 import React from 'react';
-import { useWallet } from '../context/WalletContext';
+import { useSelector, useDispatch } from 'react-redux';
 
 const Card = ({name, description }) => {
-    const { walletAddress } = useWallet();
+    const walletAddress = useSelector((state) => state.wallet.walletAddress);
 
     const handleSubscribe = async () => {
         if (!walletAddress) {

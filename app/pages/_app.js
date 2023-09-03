@@ -1,11 +1,12 @@
-import { WalletProvider } from '../context/WalletContext';
 import '../styles/globals.css';
+import { store } from '../store'
+import { Provider } from 'react-redux'
 
 function MyApp({ Component, pageProps }) {
   return (
-    <WalletProvider>
+    <Provider store={store}>
       <Component {...pageProps} />
-    </WalletProvider>
+    </Provider>
   );
 }
 

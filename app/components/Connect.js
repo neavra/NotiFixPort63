@@ -1,12 +1,15 @@
 import React, { useState } from 'react';
 import MyAlgoConnect from '@randlabs/myalgo-connect';
-import { useWallet } from '../context/WalletContext';
 import { doc, query, collection, where, getDocs } from 'firebase/firestore';
 import { storage,database } from "../firebaseConfig";
+import { useSelector, useDispatch } from 'react-redux';
+import { setWalletAddress } from '../slices/walletSlice';
+import { useRouter } from 'next/router';
 
 const Connect = () => {
-    const [connected, setConnected] = useState(false);
-    const { walletAddress, setWalletAddress } = useWallet();
+    const router = useRouter();
+    const walletAddress = useSelector((state) => state.wallet.walletAddress);
+    const dispatch = useDispatch()
 
     const handleConnect = async () => {
         const myAlgoConnect = new MyAlgoConnect({ disableLedgerNano: false });
@@ -24,15 +27,15 @@ const Connect = () => {
             const userRef = doc(collection(database, 'users'), firstAccount.address);
             
             const q = query(collection(database, 'users'), where('walletAddress', '==', firstAccount.address));
-            setWalletAddress(firstAccount.address);
+            await dispatch(setWalletAddress(firstAccount.address));
+            console.log(walletAddress)
 
             try {
                 const querySnapshot = await getDocs(q);
                 if (!querySnapshot.empty) {
-                    setConnected(true);
                 } else {
                     // User does not exist, redirect to onboarding page
-                    window.location.href = '/newuser';
+                    router.push('/newuser');
                 }
             } catch (error) {
                 console.error('Error checking user:', error);
@@ -42,7 +45,7 @@ const Connect = () => {
 
     return (
         <div className="connect-button">
-          {!connected ? (
+          {!walletAddress ? (
             <button onClick={handleConnect}>Connect Wallet</button>
           ) : (
             <div>

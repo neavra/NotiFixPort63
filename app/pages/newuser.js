@@ -1,12 +1,14 @@
 import styles from '../styles/Home.module.css';
 import Layout from '../components/Layout';
 import React, { useState } from 'react';
-import { useWallet } from '../context/WalletContext';
+import { useSelector, useDispatch } from 'react-redux';
 import MyAlgoConnect from '@randlabs/myalgo-connect';
 import algosdk from "algosdk";
+import { useRouter } from 'next/router';
 
 export default function NewUser() {
-    const { walletAddress, setWalletAddress } = useWallet();
+    const router = useRouter();
+    const walletAddress = useSelector((state) => state.wallet.walletAddress);
     const handleProtocolClick = () => {
     };
 
@@ -54,7 +56,8 @@ export default function NewUser() {
         if (serverResponse.status === 201) {
             const responseData = await serverResponse.json();
             console.log('New user created with ID:', responseData.id);
-            window.location.href = '/';
+            alert('Registration successful');
+            router.push('/');
 
         } else {
             console.error('Failed to create a new user on the server');

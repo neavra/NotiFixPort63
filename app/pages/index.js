@@ -1,10 +1,10 @@
 import styles from '../styles/Home.module.css';
 import Layout from '../components/Layout';
 import Dashboard from '../components/Dashboard';
-import { useWallet } from '../context/WalletContext';
+import { useSelector, useDispatch } from 'react-redux';
 
 export default function Home() {
-  const { walletAddress } = useWallet();
+  const walletAddress = useSelector((state) => state.wallet.walletAddress);
 
   return (
     <Layout>
