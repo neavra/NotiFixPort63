@@ -52,7 +52,7 @@ app.get('/getProtocols', async (req, res) => {
     return res.send(protocolsInfo);
 });
 
-app.post('/getSubscriptions', async (req, res) => {
+app.post('/getSubscriptionsByWallet', async (req, res) => {
   try {
     const { walletAddress } = req.body;
 
@@ -73,6 +73,31 @@ app.post('/getSubscriptions', async (req, res) => {
     return res.json(subscriptionsInfo);
   } catch (error) {
     console.error('Error fetching subscriptions:', error);
+    return res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+app.post('/getSubscriptionsByProtocol', async (req, res) => {
+  try {
+    const { protocolName } = req.body;
+
+    if (!protocolName) {
+      return res.status(400).json({ error: 'Protocol name is required' });
+    }
+
+    const subscriptionsRef = collection(db, 'subscriptions');
+    const q = query(subscriptionsRef, where('protocolName', '==', protocolName));
+
+    const querySnapshot = await getDocs(q);
+
+    const subscriptionsInfo = [];
+    querySnapshot.forEach((doc) => {
+      const subscriptionData = { id: doc.id, ...doc.data() };
+      subscriptionsInfo.push(subscriptionData);
+    });
+    return res.json(subscriptionsInfo);
+  } catch (error) {
+    console.error('Error fetching subscriptions by protocolName:', error);
     return res.status(500).json({ error: 'Internal server error' });
   }
 });
@@ -122,6 +147,31 @@ app.post('/setUser', async (req, res) => {
     return res.status(201).json({ id: userRef.id });
   } catch (error) {
     console.error('Error creating user:', error);
+    return res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+app.post('/setNotification', async (req, res) => {
+  try {
+    const { protocolName, recipient, message } = req.body;
+
+    if (!protocolName || !recipient || !message) {
+      return res.status(400).json({ error: 'Missing protocolName, recipient, or message in the request body' });
+    }
+
+    const notificationsCollection = collection(db, 'notifications');
+
+    const newNotification = {
+      protocolName,
+      recipient,
+      message,
+    };
+
+    const notificationRef = await addDoc(notificationsCollection, newNotification);
+
+    return res.status(201).json({ id: notificationRef.id });
+  } catch (error) {
+    console.error('Error creating notification:', error);
     return res.status(500).json({ error: 'Internal server error' });
   }
 });

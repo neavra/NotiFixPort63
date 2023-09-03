@@ -1,30 +1,56 @@
 import React, { useState, useEffect } from "react";
-import { ref, uploadBytes } from "firebase/storage";
-import { setDoc, doc } from "firebase/firestore";
-import { storage, database } from "../firebaseConfig";
 
 const NotificationForm = () => {
   const [recipient, setRecipient] = useState("");
-  const [protocol, setProtocol] = useState("");
+  const [protocol, setProtocol] = useState("TestC");
   const [message, setMessage] = useState("");
   const [protocolOptions, setProtocolOptions] = useState([]);
+  const [recipientOptions, setRecipientOptions] = useState([]);
 
-//   useEffect(() => {
-//     // Fetch protocol names from Firebase and update the state
-//     const fetchProtocols = async () => {
-//       const db = getFirestore();
-//       const protocolsRef = collection(db, "protocols");
-//       const querySnapshot = await getDocs(protocolsRef);
-//       const options = [];
-//       querySnapshot.forEach((doc) => {
-//         const protocolData = doc.data();
-//         options.push(protocolData.name);
-//       });
-//       setProtocolOptions(options);
-//     };
+  useEffect(() => {
+    const fetchProtocols = async () => {
+      try {
+        const response = await fetch('http://localhost:8001/getProtocols');
+        if (!response.ok) {
+          throw new Error('Failed to fetch protocols');
+        }
+        const data = await response.json();
+        console.log(data); //process data properly here
+        setProtocolOptions(data);
+      } catch (error) {
+        console.error('Error fetching protocols:', error);
+      }
+    };
 
-//     fetchProtocols();
-//   }, []);
+    fetchProtocols();
+  }, []);
+
+  useEffect(() => {
+    const fetchRecipients = async () => {
+      if (protocol) {
+        try {
+          const response = await fetch('http://localhost:8001/getSubscriptionsByProtocol', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ protocolName: protocol }),
+          });
+          if (!response.ok) {
+            throw new Error('Failed to fetch recipients');
+          }
+          const data = await response.json();
+          setRecipientOptions(data);
+        } catch (error) {
+          console.error('Error fetching recipients:', error);
+        }
+      } else {
+        setRecipientOptions([]);
+      }
+    };
+
+    fetchRecipients();
+  }, [protocol]);
 
   async function handleClick() {
     console.log(protocol, recipient, message);
@@ -32,30 +58,52 @@ const NotificationForm = () => {
       alert("Please fill out all required fields.");
       return;
     }
-    // Create a notification in firebase
+    try {
+        const response = await fetch('http://localhost:8001/setNotification', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            protocolName: protocol,
+            recipient: recipient,
+            message: message,
+          }),
+        });
+    
+        if (response.status === 201) {
+          alert("Notification sent successfully!");
+          setProtocol("TestC");
+          setRecipient("");
+          setMessage("");
+        } else {
+          alert("Failed to send notification. Please try again later.");
+        }
+      } catch (error) {
+        console.error('Error sending notification:', error);
+        alert("An error occurred while sending the notification.");
+      }
   }
 
   return (
     <form className="w-2/3 bg-gray-100 p-6 rounded-lg shadow-md">
         <div className="mb-4">
-        <label
-          className="block text-gray-700 font-medium mb-2"
-          htmlFor="protocol"
-        >
-          Protocol
-        </label>
-        <select
-          className="border border-gray-400 p-2 w-full rounded-md"
-          id="protocol"
-          value={protocol}
-          onChange={(e) => setProtocol(e.target.value)}
-        >
-          <option value="">Select Protocol</option>
-          {protocolOptions.map((option, index) => (
-            <option key={index} value={option}>
-              {option}
+            <label className="block text-gray-700 font-medium mb-2" htmlFor="protocol">
+                Protocol
+            </label>
+            <select
+                className="border border-gray-400 p-2 w-full rounded-md"
+                id="protocol"
+                value={protocol}
+                onChange={(e) => setProtocol(e.target.value)}
+                style={{ color: "black" }}
+            >
+            <option value="">Select Protocol</option>
+            {protocolOptions.map((option) => (
+            <option key={option.id} value={option.id}>
+                {option.name}
             </option>
-          ))}
+            ))}
         </select>
       </div>
       <div className="mb-4">
@@ -70,10 +118,14 @@ const NotificationForm = () => {
           id="recipient"
           value={recipient}
           onChange={(e) => setRecipient(e.target.value)}
+          style={{ color: "black" }}
         >
           <option value="">Select Recipient</option>
-          <option value="recipient1">Recipient 1</option>
-          <option value="recipient2">Recipient 2</option>
+          {recipientOptions.map((option) => (
+            <option key={option.walletAddress} value={option.walletAddress}>
+              {option.walletAddress}
+            </option>
+          ))}
         </select>
       </div>
       <div className="mb-4">
@@ -89,6 +141,7 @@ const NotificationForm = () => {
           placeholder="Enter your notification message"
           value={message}
           onChange={(e) => setMessage(e.target.value)}
+          style={{ color: "black" }}
         ></textarea>
       </div>
       <button

@@ -8,7 +8,7 @@ const Dashboard = ({walletAddress}) => {
       walletAddress: walletAddress,
     };
     useEffect(() => {
-      fetch('http://localhost:8001/getSubscriptions', {
+      fetch('http://localhost:8001/getSubscriptionsByWallet', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
