@@ -1,6 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { collection, query, where, getDocs } from 'firebase/firestore';
-import { db } from '../firebaseConfig';
 
 const NotificationsBoard = ({ recipient }) => {
   const [notifications, setNotifications] = useState([]);
@@ -36,15 +34,52 @@ const NotificationsBoard = ({ recipient }) => {
   return (
     <div>
       <h1>Your Notifications</h1>
-      <ul>
+      <div className="notification-container">
         {notifications.map((notification, index) => (
-          <li key={index}>
-            <p>Message: {notification.message}</p>
-            <p>Protocol: {notification.protocolName}</p>
-            <p>Time Sent: {notification.timeSent}</p>
-          </li>
+          <div key={index} className="notification-card">
+            <p className="notification-from">From: {notification.protocolName}</p>
+            <div className="notification-message">{notification.message}</div>
+            <p className="notification-time-sent">Time Sent: {notification.timeSent}</p>
+          </div>
         ))}
-      </ul>
+      </div>
+
+      <style jsx>{`
+        .notification-container {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+        }
+        
+        .notification-card {
+          background-color: #f0f0f0;
+          border: 1px solid #ddd;
+          border-radius: 5px;
+          margin: 10px;
+          padding: 10px;
+          width: 300px;
+          box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.2);
+        }
+
+        .notification-from {
+          font-weight: bold;
+          color: #000;
+        }
+
+        .notification-message {
+          margin-top: 10px;
+          padding: 10px;
+          border: 1px solid #ccc;
+          background-color: #fff;
+          border-radius: 5px;
+          color: #000;
+        }
+
+        .notification-time-sent {
+          font-size: 12px;
+          color: #666;
+        }
+      `}</style>
     </div>
   );
 };
