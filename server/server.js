@@ -151,6 +151,31 @@ app.post('/setUser', async (req, res) => {
   }
 });
 
+app.post('/setProtocol', async (req, res) => {
+  try {
+    const { walletAddress, type } = req.body;
+
+    if (!walletAddress || !type) {
+      return res.status(400).json({ error: 'Missing walletAddress or type in request body' });
+    }
+
+    const usersCollection = collection(db, 'users');
+
+    const newUser = {
+      walletAddress,
+      type,
+    };
+
+    const userRef = await addDoc(usersCollection, newUser);
+
+    return res.status(201).json({ id: userRef.id });
+  } catch (error) {
+    console.error('Error creating user:', error);
+    return res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+
 app.post('/setNotification', async (req, res) => {
   try {
     const { protocolName, recipient, message, status, timeSent } = req.body;
