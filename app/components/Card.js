@@ -1,12 +1,11 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 
 const Card = ({ name, description, disableSubscribe }) => {
   const walletAddress = useSelector((state) => state.wallet.walletAddress);
+  const [isSubscribed, setIsSubscribed] = useState(disableSubscribe);
 
   const handleSubscribe = async () => {
-    console.log('sub')
-    console.log(disableSubscribe)
     if (!walletAddress) {
       window.alert('Please connect your wallet before subscribing.');
       return;
@@ -33,7 +32,8 @@ const Card = ({ name, description, disableSubscribe }) => {
         console.log('New subscription created with ID:', responseData.id);
         // Show a success alert
         window.alert('Subscription successful.');
-        // You can optionally update your local state or Redux state here
+        // Update the local state to indicate that the user is subscribed
+        setIsSubscribed(true);
       } else {
         console.error('Failed to create a new subscription:', response.status);
       }
@@ -52,11 +52,11 @@ const Card = ({ name, description, disableSubscribe }) => {
       <p className="card-title">{name}</p>
       <p className="card-description">{description}</p>
       <button
-        className={`subscribe-button ${disableSubscribe ? 'disabled' : ''}`}
+        className={`subscribe-button ${isSubscribed ? 'disabled' : ''}`}
         onClick={handleSubscribe}
-        disabled={disableSubscribe}
+        disabled={isSubscribed}
       >
-        {disableSubscribe ? 'Subscribed' : 'Subscribe'}
+        {isSubscribed ? 'Subscribed' : 'Subscribe'}
       </button>
 
 
