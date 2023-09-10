@@ -4,7 +4,10 @@ import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import MyAlgoConnect from "@randlabs/myalgo-connect";
 import algosdk from "algosdk";
-import { updateEmail, optIn } from "../components/ContractCall";
+// import { updateEmail, optIn } from "../components/ContractCall";
+import { notifi } from "../components/notifi_client.ts";
+
+const appId = 320626389;
 
 export default function Settings({}) {
   const [inputEmail, setInputEmail] = useState("");
@@ -15,42 +18,60 @@ export default function Settings({}) {
     e.preventDefault();
     // Your custom logic here
     console.log("Submitted: " + inputEmail);
-    // const myAlgoConnect = new MyAlgoConnect();
 
     // const settings = {
     //   shouldSelectOneAccount: false,
     //   openManager: false,
     // };
     // // User should be prompted to sign a transaction
-    // const algodClient = new algosdk.Algodv2(
-    //   "",
-    //   "https://node.testnet.algoexplorerapi.io",
-    //   ""
-    // );
-    // console.log(walletAddress);
-    // console.log(typeof walletAddress);
-    // console.log(await algodClient.accountInformation(walletAddress).do());
+    const myAlgoConnect = new MyAlgoConnect();
 
-    // const params = await algodClient.getTransactionParams().do();
-    // // const optInTxn = algosdk.makeApplicationOptInTxnFromObject({
-    // //   suggestedParams: {
-    // //     ...params,
-    // //   },
-    // //   from: walletAddress,
-    // //   appIndex: 319781036,
-    // // });
-    // // //   const optInTxn = await optIn(algodClient, walletAddress);
-    // // const signedOptInTxn = await myAlgoConnect.signTxns([
-    // //   {
-    // //     txn: Buffer.from(optInTxn.toByte()).toString("base64"),
-    // //   },
-    // // ]);
+    async function signer(txns) {
+      console.log(txns);
+      const sTxns = await myAlgoConnect.signTransaction(
+        txns.map((txn) => txns[0].toByte())
+      );
+      return sTxns.map((s) => s.blob);
+    }
+    const algodClient = new algosdk.Algodv2(
+      "",
+      "https://node.testnet.algoexplorerapi.io",
+      ""
+    );
+    console.log(walletAddress);
+    console.log(typeof walletAddress);
+    console.log(await algodClient.accountInformation(walletAddress).do());
+
+    const notifiApp = new notifi({
+      client: algodClient,
+      signer,
+      sender: walletAddress,
+      appId,
+    });
+
+    await notifiApp.updateEmail(
+      { email: inputEmail },
+      {
+        from: walletAddress,
+        suggestedParams: await algodClient.getTransactionParams().do(),
+        boxes: [
+          {
+            appIndex: appId,
+            name: algosdk.decodeAddress(walletAddress).publicKey,
+          },
+        ],
+      }
+    );
+    // const signedOptInTxn = await myAlgoConnect.signTransaction(
+    //   optInTxn.toByte()
+    // );
+    // console.log(signedOptInTxn);
     // // const optInTxnBytes = Buffer.from(signedOptInTxn, "base64");
-    // // const optInTxnResponse = await algodClient
-    // //   .sendRawTransaction(optInTxnBytes)
-    // //   .do();
-    // // // once the transaction is signed, register the newuser
-    // // console.log(optInTxnResponse);
+    // const optInTxnResponse = await algodClient
+    //   .sendRawTransaction(signedOptInTxn.blob)
+    //   .do();
+    // // once the transaction is signed, register the newuser
+    // console.log(optInTxnResponse);
 
     // const txn = await updateEmail(algodClient, inputEmail, walletAddress);
     // const [signedTxn] = await myAlgoConnect.signTxns([
