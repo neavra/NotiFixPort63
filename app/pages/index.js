@@ -1,4 +1,5 @@
-import styles from '../styles/Home.module.css';
+//import styles from '../styles/Home.module.css';
+import styles from '../styles/table.module.css'
 import Layout from '../components/Layout';
 import Dashboard from '../components/Dashboard';
 import Notificationboard from '../components/Notificationboard';
@@ -10,12 +11,20 @@ export default function Home() {
   return (
     <Layout>
       <div className={styles.container}>
-      <main className={styles.main}>
           {walletAddress ? (
             <div>
-              <h1>Your Subscriptions</h1>
-              <Dashboard walletAddress={ walletAddress }/>
-              <Notificationboard recipient={ walletAddress }/>
+              <h2 className="ml-10 mt-10 z-50 text-4xl">Dashboard</h2>
+              <h3 className="ml-10 mt-2 text-lg text-gray-400">
+                {new Date().toLocaleString()}
+              </h3>
+              <hr className="border-gray-300 ml-10 mt-2 w-25 mr-5" />
+              <div className='flex-grow rounded-[1rem] bg-[#1F1D2B]'>
+                    <p className='ml-10 mt-[3rem] text-3xl'>Subscriptions</p>
+                    <Dashboard walletAddress={ walletAddress }/>
+              </div>
+              <div className='flex-grow rounded-[1rem] bg-[#1F1D2B]'>
+                <Notificationboard recipient={ walletAddress }/>
+              </div>  
             </div>
           ) : (
             <div className={styles.content}>
@@ -27,21 +36,6 @@ export default function Home() {
               </div>
             </div>
           )}
-        </main>
-
-        <style jsx global>{`
-          html,
-          body {
-            padding: 0;
-            margin: 0;
-            font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto,
-              Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue,
-              sans-serif;
-          }
-          * {
-            box-sizing: border-box;
-          }
-        `}</style>
       </div>
     </Layout> 
   );

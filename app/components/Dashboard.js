@@ -44,16 +44,15 @@ const Dashboard = ({walletAddress}) => {
   };
 
   return (
-    <div className="overflow-x-auto rounded-lg m-4">
-      <table className="w-full table-auto border-collapse">
-        <thead className="text-black bg-gray-100">
+    <div className="overflow-x-auto rounded-lg m-4 ml-10 mr-10">
+      <table className="w-full table-auto border-collapse text-center">
+        <thead className="text-white">
           <tr>
-            <th className="px-4 py-2">#</th>
-            <th className="px-4 py-2" onClick={() => handleSort("name")}>
-              Name{" "}
+            <th className="border-b px-4 py-2" onClick={() => handleSort("name")}>
+              Protocol{" "}
               {sortColumn === "name" && (sortDirection === "asc" ? "▲" : "▼")}
             </th>
-            <th className="px-4 py-2" onClick={() => handleSort("description")}>
+            <th className="border-b px-4 py-2" onClick={() => handleSort("description")}>
               Description{" "}
               {sortColumn === "description" && (sortDirection === "asc" ? "▲" : "▼")}
             </th>
@@ -62,19 +61,20 @@ const Dashboard = ({walletAddress}) => {
         <tbody className="text-white-700">
           {sortedData.map((row, index) => (
             <tr key={index}>
-              <td className="border px-4 py-2">{index + 1}</td>
-              <td className="border px-4 py-2">
+              <td className=" px-4 py-2">
                 <a>
                   {row.protocolName}
                 </a>
               </td>
-              <td className="border px-4 py-2">
+              <td className=" px-4 py-2">
                 <a>{row.protocolDescription}</a>
               </td>
             </tr>
           ))}
         </tbody>
       </table>
+      <p className='mt-[2rem] text-1xl'>Currently subscribed to {sortedData.length} protocol(s)</p>
+
     </div>
   );
 };
