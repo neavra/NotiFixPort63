@@ -5,40 +5,40 @@ const Card = ({name, description }) => {
     const walletAddress = useSelector((state) => state.wallet.walletAddress);
 
     const handleSubscribe = async () => {
-        if (!walletAddress) {
-            window.alert('Please connect your wallet before subscribing.');
-            return;
-        }
-    
-        const subscriptionData = {
-            walletAddress: walletAddress,
-            protocolName: name,
-            protocolDescription: description,
-        };
-    
-        try {
-            const response = await fetch('http://localhost:8001/setSubscription', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(subscriptionData),
-            });
-    
-            if (response.status === 201) {
-                // Subscription created successfully
-                const responseData = await response.json();
-                console.log('New subscription created with ID:', responseData.id);
-                // Show a success alert
-                window.alert('Subscription successful.');
-                window.location.reload();
-            } else {
-                console.error('Failed to create a new subscription:', response.status);
-            }
-        } catch (error) {
-            console.error('Error creating subscription:', error);
-        }
-    };
+      if (!walletAddress) {
+          window.alert('Please connect your wallet before subscribing.');
+          return;
+      }
+  
+      const subscriptionData = {
+          walletAddress: walletAddress,
+          protocolName: name,
+          protocolDescription: description,
+      };
+  
+      try {
+          const response = await fetch('http://localhost:8001/setSubscription', {
+              method: 'POST',
+              headers: {
+                  'Content-Type': 'application/json',
+              },
+              body: JSON.stringify(subscriptionData),
+          });
+  
+          if (response.status === 201) {
+              // Subscription created successfully
+              const responseData = await response.json();
+              console.log('New subscription created with ID:', responseData.id);
+              // Show a success alert
+              window.alert('Subscription successful.');
+              // You can optionally update your local state or Redux state here
+          } else {
+              console.error('Failed to create a new subscription:', response.status);
+          }
+      } catch (error) {
+          console.error('Error creating subscription:', error);
+      }
+  };
     
     const imageSrc = `https://firebasestorage.googleapis.com/v0/b/notifi-port63.appspot.com/o/${
         name
