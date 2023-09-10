@@ -18,11 +18,11 @@ export default function Home() {
                 {new Date().toLocaleString()}
               </h3>
               <hr className="border-gray-300 ml-10 mt-2 w-25 mr-5" />
-              <div className='flex-grow rounded-[1rem] bg-[#1F1D2B]'>
-                    <p className='ml-10 mt-[3rem] text-3xl'>Subscriptions</p>
+              <div className='flex-grow mt-10 p-1 rounded-[1rem] bg-[#1F1D2B]'>
+                    <p className='ml-10 text-3xl mt-5'>Subscriptions</p>
                     <Dashboard walletAddress={ walletAddress }/>
               </div>
-              <div className='flex-grow rounded-[1rem] bg-[#1F1D2B]'>
+              <div className='flex-grow p-1 mt-10 rounded-[1rem] bg-[#1F1D2B]'>
                 <Notificationboard recipient={ walletAddress }/>
               </div>  
             </div>

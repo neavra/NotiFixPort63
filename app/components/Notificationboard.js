@@ -33,7 +33,7 @@ const NotificationsBoard = ({ recipient }) => {
 
   return (
     <div>
-    <p className='ml-10 mt-[3rem] text-3xl'>Notifications</p>
+    <p className='ml-10 mt-5 text-3xl'>Notifications</p>
     <div className="overflow-x-auto rounded-lg m-4 ml-10 mr-10">
       <table className="w-full table-auto border-collapse text-center">
         <thead className="text-white">
