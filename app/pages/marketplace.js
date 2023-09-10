@@ -41,33 +41,33 @@ export default function MarketPlace() {
       <div className={styles.container}>
         <h2 className="ml-10 mt-20 z-50 font-bold text-4xl">Market Place</h2>
         <div className='m-10 flex-grow rounded-[1.5rem] bg-[#1F1D2B]'>
-          <p className='ml-10 mt-[3rem] font-medium text-3xl'>Protocols</p>
+          <p className='ml-10 mb-10 mt-[3rem] font-medium text-3xl'>Protocols</p>
 
-          <form>
-            <input
-              type="search"
-              className="m-10 h-[3.4rem] w-[73.5rem] px-4 flex items-center text-center border-2 border-gray-700 rounded-md bg-gray-900 text-white focus:outline-none focus:ring focus:ring-gray-500"
-              placeholder="Search Protocol"
-              value={query}
-              onChange={handleChange}
+          <input
+                type="search"
+                className="h-[3.4rem] w-[94%] mx-auto px-4 flex items-center text-center border-2 border-gray-700 rounded-md bg-gray-900 text-white focus:outline-none focus:ring focus:ring-gray-500"
+                placeholder="Search Protocol"
+                value={query}
+                onChange={handleChange}
             />
-          </form>
 
           <div className='border border-2 border-gray-700 rounded-md bg-gray-900 p-4 m-10 text-center rounded-lg'>
-            <div className="flex flex-wrap justify-center m-4">
-              {loading ? (
+          <div className="flex flex-wrap justify-center m-4">
+            {loading ? (
                 <h1>Loading...</h1>
-              ) : (
+            ) : filteredProtocols.length === 0 ? (
+                <p>No matches found</p>
+            ) : (
                 filteredProtocols.map((protocol, i) => (
-                  <div key={i} className="m-2">
+                <div key={i} className="m-2">
                     <Card
-                      key={i}
-                      name={protocol.name}
-                      description={protocol.description}
+                    key={i}
+                    name={protocol.name}
+                    description={protocol.description}
                     />
-                  </div>
+                </div>
                 ))
-              )}
+            )}
             </div>
           </div>
 
