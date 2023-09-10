@@ -48,10 +48,10 @@ export default function MarketPlace() {
         <Layout>
             <div className={styles.container}>
                 <main className={styles.main}>
-                    <div>
-                        <h2>This is the marketplace page</h2>
-                    </div>
-                    <div className="flex flex-wrap justify-center m-4">{loading ? generateLoadingCards() : generateCards(protocols)}</div>
+
+                    <h2 className="absolute top-10 left-40 z-50 font-bold text-4xl">Market Place</h2>
+
+                    {/* <div className="flex flex-wrap justify-center m-4">{loading ? generateLoadingCards() : generateCards(protocols)}</div> */}
                 </main>
 
                 <style jsx global>{`
