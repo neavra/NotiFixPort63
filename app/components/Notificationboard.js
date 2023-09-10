@@ -33,54 +33,39 @@ const NotificationsBoard = ({ recipient }) => {
 
   return (
     <div>
-      <h1>Your Notifications</h1>
-      <div className="notification-container">
-        {notifications.map((notification, index) => (
-          <div key={index} className="notification-card">
-            <p className="notification-from">From: {notification.protocolName}</p>
-            <div className="notification-message">{notification.message}</div>
-            <p className="notification-time-sent">Time Sent: {notification.timeSent}</p>
-          </div>
-        ))}
-      </div>
-
-      <style jsx>{`
-        .notification-container {
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-        }
-        
-        .notification-card {
-          background-color: #f0f0f0;
-          border: 1px solid #ddd;
-          border-radius: 5px;
-          margin: 10px;
-          padding: 10px;
-          width: 300px;
-          box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.2);
-        }
-
-        .notification-from {
-          font-weight: bold;
-          color: #000;
-        }
-
-        .notification-message {
-          margin-top: 10px;
-          padding: 10px;
-          border: 1px solid #ccc;
-          background-color: #fff;
-          border-radius: 5px;
-          color: #000;
-        }
-
-        .notification-time-sent {
-          font-size: 12px;
-          color: #666;
-        }
-      `}</style>
+    <p className='ml-10 mt-5 text-3xl'>Notifications</p>
+    <div className="overflow-x-auto rounded-lg m-4 ml-10 mr-10">
+      <table className="w-full table-auto border-collapse text-center">
+        <thead className="text-white">
+          <tr>
+            <th className="border-b px-4 py-2">Protocol</th>
+            <th className="border-b px-4 py-2">Message</th>
+            <th className="border-b px-4 py-2">Time Sent</th>
+          </tr>
+        </thead>
+        <tbody className="text-white-700">
+          {notifications.map((notification, index) => (
+            <tr key={index}>
+              <td className="px-4 py-2">
+                <a>
+                  {notification.protocolName}
+                </a>
+              </td>
+              <td className="px-4 py-2">
+                <a>
+                  {notification.message}
+                </a>
+              </td>
+              <td className="px-4 py-2">
+                <a>{notification.timeSent}</a>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+      
     </div>
+  </div>
   );
 };
 

@@ -1,4 +1,5 @@
-import styles from '../styles/Home.module.css';
+//import styles from '../styles/Home.module.css';
+import styles from '../styles/table.module.css'
 import Layout from '../components/Layout';
 import Dashboard from '../components/Dashboard';
 import Notificationboard from '../components/Notificationboard';
@@ -10,38 +11,33 @@ export default function Home() {
   return (
     <Layout>
       <div className={styles.container}>
-      <main className={styles.main}>
           {walletAddress ? (
             <div>
-              <h1>Your Subscriptions</h1>
-              <Dashboard walletAddress={ walletAddress }/>
-              <Notificationboard recipient={ walletAddress }/>
+              <h2 className="ml-10 mt-10 z-50 text-4xl">Dashboard</h2>
+              <h3 className="ml-10 mt-2 text-lg text-gray-400">
+                {new Date().toLocaleString()}
+              </h3>
+              <hr className="border-gray-300 ml-10 mt-2 w-25 mr-5" />
+              <div className='flex-grow mt-10 p-1 rounded-[1rem] bg-[#1F1D2B]'>
+                    <p className='ml-10 text-3xl mt-5'>Subscriptions</p>
+                    <Dashboard walletAddress={ walletAddress }/>
+              </div>
+              <div className='flex-grow p-1 mt-10 rounded-[1rem] bg-[#1F1D2B]'>
+                <Notificationboard recipient={ walletAddress }/>
+              </div>  
             </div>
           ) : (
-            <div className={styles.content}>
-              <div className={styles.logo}>
-                <img src="/NotiFiLogo.svg" alt="Logo" />
-              </div>
-              <div className={styles.slogan}>
-                <h2>Your Slogan Here</h2>
-              </div>
-            </div>
-          )}
-        </main>
+          <div className="flex flex-col items-center justify-center text-center mt-[3rem]">
+            {/* Image */}
+            <img src="/NotiFi Logo.png" alt="Logo" className="mt-3 w-96 h-96 rounded-[1rem]" />
 
-        <style jsx global>{`
-          html,
-          body {
-            padding: 0;
-            margin: 0;
-            font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto,
-              Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue,
-              sans-serif;
-          }
-          * {
-            box-sizing: border-box;
-          }
-        `}</style>
+            {/* Text */}
+            <div className="text-2xl mt-3 ml-[10rem] mr-[10rem]">
+              <h3>NotiFi is a decentralized one-stop service built on Algorand that enables anonymous, cross-platform notifications for Decentralized Applications</h3>
+            </div>
+          </div>
+
+          )}
       </div>
     </Layout> 
   );
