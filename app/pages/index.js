@@ -27,14 +27,16 @@ export default function Home() {
               </div>  
             </div>
           ) : (
-            <div className={styles.content}>
-              <div className={styles.logo}>
-                <img src="/NotiFiLogo.svg" alt="Logo" />
-              </div>
-              <div className={styles.slogan}>
-                <h2>Your Slogan Here</h2>
-              </div>
+          <div className="flex flex-col items-center justify-center text-center mt-[3rem]">
+            {/* Image */}
+            <img src="/NotiFi Logo.png" alt="Logo" className="mt-3 w-96 h-96 rounded-[1rem]" />
+
+            {/* Text */}
+            <div className="text-2xl mt-3 ml-[10rem] mr-[10rem]">
+              <h3>NotiFi is a decentralized one-stop service built on Algorand that enables anonymous, cross-platform notifications for Decentralized Applications</h3>
             </div>
+          </div>
+
           )}
       </div>
     </Layout> 
