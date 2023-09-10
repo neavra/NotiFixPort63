@@ -2,6 +2,7 @@ import styles from '../styles/Home.module.css';
 import Layout from '../components/Layout';
 import Card from "../components/Card";
 import { useEffect, useState } from "react";
+import { useSelector, useDispatch } from 'react-redux';
 
 export default function MarketPlace() {
   const [loading, setLoading] = useState(true);
@@ -24,6 +25,29 @@ export default function MarketPlace() {
     fetchData();
   }, []);
 
+  const [walletProtocols, setData] = useState([]);
+
+  const walletAddress = useSelector((state) => state.wallet.walletAddress);
+  console.log(walletAddress)
+
+  const requestBody = {
+    walletAddress: walletAddress,
+  };
+
+  useEffect(() => {
+    fetch('http://localhost:8001/getSubscriptionsByWallet', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(requestBody),
+    })
+      .then((response) => response.json())
+      .then((data) => setData(data))
+      .catch((error) => console.error('Error fetching data:', error));
+  }, [walletAddress]);
+
+
   useEffect(() => {
     // Filter protocols based on the query
     const results = protocols.filter(protocol =>
@@ -44,30 +68,40 @@ export default function MarketPlace() {
           <p className='ml-10 mb-10 mt-[3rem] font-medium text-3xl'>Protocols</p>
 
           <input
-                type="search"
-                className="h-[3.4rem] w-[94%] mx-auto px-4 flex items-center text-center border-2 border-gray-700 rounded-md bg-gray-900 text-white focus:outline-none focus:ring focus:ring-gray-500"
-                placeholder="Search Protocol"
-                value={query}
-                onChange={handleChange}
-            />
+            type="search"
+            className="h-[3.4rem] w-[94%] mx-auto px-4 flex items-center text-center border-2 border-gray-700 rounded-md bg-gray-900 text-white focus:outline-none focus:ring focus:ring-gray-500"
+            placeholder="Search Protocol"
+            value={query}
+            onChange={handleChange}
+          />
 
           <div className='border border-2 border-gray-700 rounded-md bg-gray-900 p-4 m-10 text-center rounded-lg'>
-          <div className="flex flex-wrap justify-center m-4">
-            {loading ? (
+            <div className="flex flex-wrap justify-center m-4">
+              {loading ? (
                 <h1>Loading...</h1>
-            ) : filteredProtocols.length === 0 ? (
+              ) : filteredProtocols.length === 0 ? (
                 <p>No matches found</p>
-            ) : (
-                filteredProtocols.map((protocol, i) => (
-                <div key={i} className="m-2">
-                    <Card
-                    key={i}
-                    name={protocol.name}
-                    description={protocol.description}
-                    />
-                </div>
-                ))
-            )}
+              ) : (
+                filteredProtocols.map((protocol, i) => {
+                    // Extract protocolName values from walletProtocols and form a new array
+                    const walletProtocolNames = walletProtocols.map((walletProtocol) => walletProtocol.protocolName);
+                  
+                    // Check if protocol name exists in walletProtocolNames
+                    const isSubscribed = walletProtocolNames.includes(protocol.name);
+                  
+                    // console.log(isSubscribed);
+                    return (
+                      <div key={i} className="m-2">
+                        <Card
+                          key={i}
+                          name={protocol.name}
+                          description={protocol.description}
+                          disableSubscribe={isSubscribed} // Pass the prop to disable the subscription button
+                        />
+                      </div>
+                    );
+                })
+              )}
             </div>
           </div>
 

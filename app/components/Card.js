@@ -1,56 +1,64 @@
 import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 
-const Card = ({name, description }) => {
-    const walletAddress = useSelector((state) => state.wallet.walletAddress);
+const Card = ({ name, description, disableSubscribe }) => {
+  const walletAddress = useSelector((state) => state.wallet.walletAddress);
 
-    const handleSubscribe = async () => {
-      if (!walletAddress) {
-          window.alert('Please connect your wallet before subscribing.');
-          return;
+  const handleSubscribe = async () => {
+    console.log('sub')
+    console.log(disableSubscribe)
+    if (!walletAddress) {
+      window.alert('Please connect your wallet before subscribing.');
+      return;
+    }
+
+    const subscriptionData = {
+      walletAddress: walletAddress,
+      protocolName: name,
+      protocolDescription: description,
+    };
+
+    try {
+      const response = await fetch('http://localhost:8001/setSubscription', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(subscriptionData),
+      });
+
+      if (response.status === 201) {
+        // Subscription created successfully
+        const responseData = await response.json();
+        console.log('New subscription created with ID:', responseData.id);
+        // Show a success alert
+        window.alert('Subscription successful.');
+        // You can optionally update your local state or Redux state here
+      } else {
+        console.error('Failed to create a new subscription:', response.status);
       }
-  
-      const subscriptionData = {
-          walletAddress: walletAddress,
-          protocolName: name,
-          protocolDescription: description,
-      };
-  
-      try {
-          const response = await fetch('http://localhost:8001/setSubscription', {
-              method: 'POST',
-              headers: {
-                  'Content-Type': 'application/json',
-              },
-              body: JSON.stringify(subscriptionData),
-          });
-  
-          if (response.status === 201) {
-              // Subscription created successfully
-              const responseData = await response.json();
-              console.log('New subscription created with ID:', responseData.id);
-              // Show a success alert
-              window.alert('Subscription successful.');
-              // You can optionally update your local state or Redux state here
-          } else {
-              console.error('Failed to create a new subscription:', response.status);
-          }
-      } catch (error) {
-          console.error('Error creating subscription:', error);
-      }
+    } catch (error) {
+      console.error('Error creating subscription:', error);
+    }
   };
-    
-    const imageSrc = `https://firebasestorage.googleapis.com/v0/b/notifi-port63.appspot.com/o/${
-        name
-    }?alt=media&token=07ddd564-df85-49a5-836a-c63f0a4045d6`;
-    return (
+
+  const imageSrc = `https://firebasestorage.googleapis.com/v0/b/notifi-port63.appspot.com/o/${name}?alt=media&token=07ddd564-df85-49a5-836a-c63f0a4045d6`;
+
+  return (
     <div className="card">
       <div className="card-image-container">
         <img src={imageSrc} alt="Card" className="card-image" />
       </div>
       <p className="card-title">{name}</p>
       <p className="card-description">{description}</p>
-      <button className="subscribe-button" onClick={handleSubscribe}>Subscribe</button>
+      <button
+        className={`subscribe-button ${disableSubscribe ? 'disabled' : ''}`}
+        onClick={handleSubscribe}
+        disabled={disableSubscribe}
+      >
+        {disableSubscribe ? 'Subscribed' : 'Subscribe'}
+      </button>
+
 
       <style jsx>{`
         .card {
@@ -95,6 +103,14 @@ const Card = ({name, description }) => {
           border-radius: 1.375rem;
           padding: 10px 15px;
           cursor: pointer;
+        }
+        .disabled {
+          background-color: gray; /* Set the background color to gray */
+          color: white;
+          border: none;
+          border-radius: 1.375rem;
+          padding: 10px 15px;
+          cursor: not-allowed; /* Change the cursor to not-allowed */
         }
       `}</style>
     </div>
