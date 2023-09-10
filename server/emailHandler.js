@@ -1,10 +1,11 @@
 const nodemailer = require("nodemailer");
 
+require("dotenv").config();
 const transporter = nodemailer.createTransport({
   service: "gmail",
   auth: {
     user: "notifi.port63@gmail.com",
-    pass: "ljxxodfjvfkqntql",
+    pass: process.env.APP_PASSWORD,
   },
 });
 
