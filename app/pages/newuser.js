@@ -37,17 +37,17 @@ export default function NewUser() {
         // once the transaction is signed, register the newuser
         console.log(response)
         // insert the new user
-        const newUser = {
+        const newProtocol = {
             walletAddress: walletAddress,
             type: 'protocol',
         };
     
-        const serverResponse = await fetch('http://localhost:8001/setProtocol', {
+        const serverResponse = await fetch('http://localhost:8001/setUser', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
         },
-            body: JSON.stringify(newUser),
+            body: JSON.stringify(newProtocol),
         });
     
         if (serverResponse.status === 201) {
