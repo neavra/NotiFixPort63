@@ -45,34 +45,55 @@ const Card = ({name, description }) => {
     }?alt=media&token=07ddd564-df85-49a5-836a-c63f0a4045d6`;
     return (
     <div className="card">
-      <img src={imageSrc} alt="Card" className="card-image" />
-      <p className="card-description">{name}</p>
+      <div className="card-image-container">
+        <img src={imageSrc} alt="Card" className="card-image" />
+      </div>
+      <p className="card-title">{name}</p>
       <p className="card-description">{description}</p>
       <button className="subscribe-button" onClick={handleSubscribe}>Subscribe</button>
 
       <style jsx>{`
         .card {
-          border: 1px solid #ccc;
+          border: 2px solid #4A5568;
           padding: 20px;
           margin: 20px;
           text-align: center;
+          border-radius: 0.375rem;
+          width: 25vw;
+          height: 48vh;
+        }
+
+        .card-image-container {
+          display: flex;
+          justify-content: center; 
+          align-items: center; 
+          margin-bottom: 10px; 
         }
         
         .card-image {
-          width: 100px;
-          height: 100px;
+          width: 10vw;
+          height: 17vh;
           object-fit: cover;
+          border-radius: 2.375rem;
+        }
+
+        .card-title {
+          margin: 10px 0;
+          font-size: 1.5rem;
         }
 
         .card-description {
           margin: 10px 0;
+          color: gray;
+          margin-bottom: 30px;
         }
 
         .subscribe-button {
           background-color: #EA7C69;
           color: white;
           border: none;
-          padding: 5px 10px;
+          border-radius: 1.375rem;
+          padding: 10px 15px;
           cursor: pointer;
         }
       `}</style>

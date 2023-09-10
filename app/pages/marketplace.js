@@ -18,11 +18,14 @@ function generateCards(protocols) {
 
 function generateLoadingCards() {
     const loadingCards = [];
-    for (let i = 0; i < 4; i++) {
-        loadingCards.push(
-            <h1 key={i}>LOADING</h1>
-        );
-    }
+    // for (let i = 0; i < 4; i++) {
+    //     loadingCards.push(
+    //         <h1 key={i}>LOADING</h1>
+    //     );
+    // }
+    loadingCards.push(
+        <h1>LOADING</h1>
+    );
     return loadingCards;
 }
 
@@ -47,26 +50,37 @@ export default function MarketPlace() {
     return (
         <Layout>
             <div className={styles.container}>
-                <main className={styles.main}>
+                <h2 className="ml-10 mt-20 z-50 font-bold text-4xl">Market Place</h2>
+                <div className='m-10 flex-grow rounded-[1.5rem] bg-[#1F1D2B]'>
+                    <p className='ml-10 mt-[3rem] font-medium text-3xl'>Protocols</p>
 
-                    <h2 className="absolute top-10 left-40 z-50 font-bold text-4xl">Market Place</h2>
+                    <form>
+                        <input
+                                type="text"
+                                className="m-10 h-[3.4rem] w-[73.5rem] px-4 flex items-center text-center border-2 border-gray-700 rounded-md bg-gray-900 text-white focus:outline-none focus:ring focus:ring-gray-500"
+                                placeholder="Search Protocol"
+                        />
+                    </form>
+                    
+                    
+                    <div className='border border-2 border-gray-700 rounded-md bg-gray-900 p-4 m-10 text-center rounded-lg'>
+                        <div className="flex flex-wrap justify-center m-4">{loading ? generateLoadingCards() : generateCards(protocols)}</div>
+                    </div>
 
-                    {/* <div className="flex flex-wrap justify-center m-4">{loading ? generateLoadingCards() : generateCards(protocols)}</div> */}
-                </main>
-
-                <style jsx global>{`
-                    html,
-                    body {
-                    padding: 0;
-                    margin: 0;
-                    font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto,
-                        Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue,
-                        sans-serif;
-                    }
-                    * {
-                    box-sizing: border-box;
-                    }
-                `}</style>
+                    <style jsx global>{`
+                        html,
+                        body {
+                        padding: 0;
+                        margin: 0;
+                        font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto,
+                            Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue,
+                            sans-serif;
+                        }
+                        * {
+                        box-sizing: border-box;
+                        }
+                    `}</style>
+                </div>
             </div>
         </Layout>
     );

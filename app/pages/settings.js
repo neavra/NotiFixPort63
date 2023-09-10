@@ -29,7 +29,7 @@ export default function Settings({}) {
                     </div>
                 </div>
             
-                <div className='m-10  flex-grow rounded-[1.5rem] bg-[#1F1D2B]'>
+                <div className='m-10 flex-grow rounded-[1.5rem] bg-[#1F1D2B]'>
                     <p className='ml-10 mt-[3rem] font-medium text-3xl'>Method of Receiving Notifications</p>
                     <form
                         onSubmit={handleSubmitEmail}
