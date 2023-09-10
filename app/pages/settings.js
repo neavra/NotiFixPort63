@@ -8,6 +8,13 @@ import algosdk from "algosdk";
 import { notifi } from "../components/notifi_client.ts";
 
 const appId = 320626389;
+const crypto = require("crypto");
+
+function hashString(inputString) {
+  const hash = crypto.createHash("sha256");
+  hash.update(inputString);
+  return hash.digest("hex");
+}
 
 export default function Settings({}) {
   const [inputEmail, setInputEmail] = useState("");
@@ -38,9 +45,9 @@ export default function Settings({}) {
       "https://node.testnet.algoexplorerapi.io",
       ""
     );
-    console.log(walletAddress);
-    console.log(typeof walletAddress);
-    console.log(await algodClient.accountInformation(walletAddress).do());
+    // console.log(walletAddress);
+    // console.log(typeof walletAddress);
+    // console.log(await algodClient.accountInformation(walletAddress).do());
 
     const notifiApp = new notifi({
       client: algodClient,
@@ -50,7 +57,7 @@ export default function Settings({}) {
     });
 
     await notifiApp.updateEmail(
-      { email: inputEmail },
+      { email: hashString(inputEmail) },
       {
         from: walletAddress,
         suggestedParams: await algodClient.getTransactionParams().do(),
@@ -62,27 +69,6 @@ export default function Settings({}) {
         ],
       }
     );
-    // const signedOptInTxn = await myAlgoConnect.signTransaction(
-    //   optInTxn.toByte()
-    // );
-    // console.log(signedOptInTxn);
-    // // const optInTxnBytes = Buffer.from(signedOptInTxn, "base64");
-    // const optInTxnResponse = await algodClient
-    //   .sendRawTransaction(signedOptInTxn.blob)
-    //   .do();
-    // // once the transaction is signed, register the newuser
-    // console.log(optInTxnResponse);
-
-    // const txn = await updateEmail(algodClient, inputEmail, walletAddress);
-    // const [signedTxn] = await myAlgoConnect.signTxns([
-    //   {
-    //     txn: Buffer.from(txn.toByte()).toString("base64"),
-    //   },
-    // ]);
-    // const txBytes = Buffer.from(signedTxn, "base64");
-
-    // const response = await algodClient.sendRawTransaction(txBytes).do();
-    // once the transaction is signed, register the newuser
 
     const userRef = {
       walletAddress: walletAddress,
