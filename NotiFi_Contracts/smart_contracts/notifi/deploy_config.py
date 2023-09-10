@@ -32,19 +32,19 @@ def deploy(
         on_update=algokit_utils.OnUpdate.AppendApp,
     )
 
-    name = "world"
-    response = app_client.hello(name=name)
-    logger.info(
-        f"Called hello on {app_spec.contract.name} ({app_client.app_id}) "
-        f"with name={name}, received: {response.return_value}"
-    )
+    name = ""
+    # response = app_client.hello(name=name)
+    # logger.info(
+    #     f"Called hello on {app_spec.contract.name} ({app_client.app_id}) "
+    #     f"with name={name}, received: {response.return_value}"
+    # )
 
     ensure_funded(
         algod_client,
         EnsureBalanceParameters(
             account_to_fund=app_client.app_address,
-            min_spending_balance_micro_algos=10000 * algo,
-            min_funding_increment_micro_algos=10000 * algo,
+            min_spending_balance_micro_algos=3 * algo,
+            min_funding_increment_micro_algos=3 * algo,
         ),
     )
     # need address as bytes

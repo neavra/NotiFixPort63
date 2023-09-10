@@ -12,6 +12,7 @@
     "@randlabs/myalgo-connect": "^1.4.2",
     "@reduxjs/toolkit": "^1.9.5",
     "algosdk": "^2.5.0",
+    "beaker-ts": "^0.1.2",
     "dotenv": "^16.3.1",
     "firebase": "^10.3.1",
     "framer-motion": "^10.16.1",

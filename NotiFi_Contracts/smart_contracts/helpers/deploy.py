@@ -29,8 +29,8 @@ def deploy(
     # get clients
     # by default client configuration is loaded from environment variables
     # Get LocalNet algod client
-    algod_client = localnet.get_algod_client()
-    indexer_client = localnet.get_indexer_client()
+    algod_client = get_algod_client()
+    indexer_client = get_indexer_client()
 
     # get app spec
     app_spec = ApplicationSpecification.from_json(app_spec_path.read_text())
@@ -38,15 +38,15 @@ def deploy(
     # get deployer account by name
     deployer = get_account(algod_client, "DEPLOYER", fund_with_algos=10000)
 
-    minimum_funds_micro_algos = algos_to_microalgos(deployer_initial_funds)
-    ensure_funded(
-        algod_client,
-        EnsureBalanceParameters(
-            account_to_fund=deployer,
-            min_spending_balance_micro_algos=10000 * algo,
-            min_funding_increment_micro_algos=10000 * algo,
-        ),
-    )
+    # minimum_funds_micro_algos = algos_to_microalgos(deployer_initial_funds)
+    # ensure_funded(
+    #     algod_client,
+    #     EnsureBalanceParameters(
+    #         account_to_fund=deployer,
+    #         min_spending_balance_micro_algos=10000 * algo,
+    #         min_funding_increment_micro_algos=10000 * algo,
+    #     ),
+    # )
 
     # use provided callback to deploy the app
     deploy_callback(algod_client, indexer_client, app_spec, deployer)
