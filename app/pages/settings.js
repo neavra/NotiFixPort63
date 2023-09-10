@@ -63,7 +63,7 @@ export default function Settings({}) {
                         />
                         <button
                             type="submit"
-                            className="ml-10 h-[3rem] w-[19rem] px-4 flex items-center border-2 border-gray-700 rounded-md bg-gray-800 text-white hover:bg-gray-700 focus:outline-none focus:ring focus:ring-gray-500"
+                            className="ml-10 mb-10 h-[3rem] w-[19rem] px-4 flex items-center border-2 border-gray-700 rounded-md bg-gray-800 text-white hover:bg-gray-700 focus:outline-none focus:ring focus:ring-gray-500"
                         >
                             Register For Telegram Notifications
                         </button>
