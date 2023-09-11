@@ -165,6 +165,34 @@ app.post("/setUser", async (req, res) => {
   }
 });
 
+app.post("/getUserByWallet", async (req, res) => {
+  try {
+    const { walletAddress } = req.body;
+
+    if (!walletAddress) {
+      return res.status(400).json({ error: "Wallet address is required" });
+    }
+
+    const usersRef = collection(db, "users");
+    const q = query(
+      usersRef,
+      where("walletAddress", "==", walletAddress)
+    );
+
+    const querySnapshot = await getDocs(q);
+
+    const usersInfo = [];
+    querySnapshot.forEach((doc) => {
+      const userData = { id: doc.id, ...doc.data() };
+      usersInfo.push(userData);
+    });
+    return res.json(usersInfo);
+  } catch (error) {
+    console.error("Error fetching subscriptions:", error);
+    return res.status(500).json({ error: "Internal server error" });
+  }
+});
+
 app.post("/setNotification", async (req, res) => {
   try {
     const { protocolName, recipient, message, status, timeSent } = req.body;
