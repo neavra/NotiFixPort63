@@ -79,7 +79,7 @@ const Connect = () => {
             onMouseEnter={() => setIsHovered(true)}
             onMouseLeave={() => setIsHovered(false)}
           >
-            {isHovered ? <button onClick={() => setShowModal(true)}>Logout</button> : `${walletAddress.slice(0, 4)}...${walletAddress.slice(-4)}`}
+            {isHovered ? <button onClick={() => setShowModal(true)}>Logout 👋🏼</button> : `${walletAddress.slice(0, 4)}...${walletAddress.slice(-4)}`}
           </p>
         </div>
       )}
