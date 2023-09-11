@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 
-const Dashboard = ({walletAddress}) => {
+const ProtocolDashboard = ({walletAddress}) => {
     const [data, setData] = useState([]);
     const [sortColumn, setSortColumn] = useState("name");
     const [sortDirection, setSortDirection] = useState("asc");
@@ -43,41 +43,35 @@ const Dashboard = ({walletAddress}) => {
     }
   };
 
+  const users = ['F3LYMMIT5TTCPJJGLS7RQ5BQA6LMOFVTRPRA5QQTR4KEJWP5XNBCNYM65Q', 'JSCXVRMRFUMK6QD4LZKI5JLFY5NNRCVPXRTXVSJRFRJDVEXZSBAOTOCDTI']
+
   return (
     <div className="overflow-x-auto rounded-lg m-4 ml-10 mr-10">
-      <p className='text-3xl'>Subscriptions</p>
-      <table className="w-full table-auto border-collapse text-center">
+      <p className='text-3xl'>Subscribers</p>
+      <table className="w-full table-auto border-collapse text-left">
         <thead className="text-white">
           <tr>
-            <th className="border-b px-4 py-2" onClick={() => handleSort("name")}>
-              Protocol{" "}
-              {sortColumn === "name" && (sortDirection === "asc" ? "▲" : "▼")}
-            </th>
-            <th className="border-b px-4 py-2" onClick={() => handleSort("description")}>
-              Description{" "}
-              {sortColumn === "description" && (sortDirection === "asc" ? "▲" : "▼")}
+            <th className="border-b py-2">
+              Users
             </th>
           </tr>
         </thead>
         <tbody className="text-white-700">
-          {sortedData.map((row, index) => (
+          {users.map((user, index) => (
             <tr key={index}>
-              <td className=" px-4 py-2">
+              <td className="py-2">
                 <a>
-                  {row.protocolName}
+                  {user}
                 </a>
-              </td>
-              <td className=" px-4 py-2">
-                <a>{row.protocolDescription}</a>
               </td>
             </tr>
           ))}
         </tbody>
       </table>
-      <p className='mt-[2rem] text-1xl'>Currently subscribed to {sortedData.length} protocol(s)</p>
-
+      <p className='mt-[2rem] text-1xl'>{users.length} users are currently subscribed</p>
     </div>
   );
+  
 };
 
-export default Dashboard;
+export default ProtocolDashboard;
